@@ -27,18 +27,27 @@ jobs:
     defaults:
       run:
         working-directory: mobile
-    env:
-      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Cắt khoảng trắng / xuống dòng bị dính khi dán token vào GitHub Secrets,
+      # rồi xuất EXPO_TOKEN đã làm sạch cho các bước sau.
       - name: Check EXPO_TOKEN
+        env:
+          RAW_EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
         run: |
-          if [ -z "$EXPO_TOKEN" ]; then
+          CLEAN="$(printf '%s' "$RAW_EXPO_TOKEN" | tr -d '[:space:]')"
+          if [ -z "$CLEAN" ]; then
             echo "::error::Chưa có secret EXPO_TOKEN. Vào Settings > Secrets and variables > Actions để thêm."
             exit 1
           fi
+          if printf '%s' "$CLEAN" | LC_ALL=C grep -q '[^A-Za-z0-9_.-]'; then
+            echo "::warning::EXPO_TOKEN có ký tự lạ — kiểm tra lại có lỡ dán ngoặc kép, 'Bearer ' hay 'EXPO_TOKEN=' không."
+          fi
+          echo "::add-mask::$CLEAN"
+          echo "EXPO_TOKEN=$CLEAN" >> "$GITHUB_ENV"
+          echo "Token OK (độ dài ${#CLEAN} ký tự)"
 
       - name: Setup Node
         uses: actions/setup-node@v4
