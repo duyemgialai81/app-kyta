@@ -27,25 +27,35 @@ jobs:
     defaults:
       run:
         working-directory: mobile
+    env:
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Check EXPO_TOKEN
+        run: |
+          if [ -z "$EXPO_TOKEN" ]; then
+            echo "::error::Chưa có secret EXPO_TOKEN. Vào Settings > Secrets and variables > Actions để thêm."
+            exit 1
+          fi
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
           cache-dependency-path: mobile/package-lock.json
 
-      - name: Setup EAS
-        uses: expo/expo-github-action@v8
-        with:
-          eas-version: latest
-          token: ${{ secrets.EXPO_TOKEN }}
+      # Cài eas-cli bằng npm thay cho expo/expo-github-action (bản v8 cài bằng yarn bị lỗi)
+      - name: Install EAS CLI
+        run: npm install -g eas-cli@latest && eas --version
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Check Expo login
+        run: eas whoami
 
       - name: TypeScript check
         run: npx tsc --noEmit
