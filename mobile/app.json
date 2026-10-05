@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "FPT-IS",
+    "slug": "fpt-is-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#0b1020"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.donjaderoy.fptis"
+    },
+    "android": {
+      "package": "com.donjaderoy.fptis",
+      "adaptiveIcon": {
+        "backgroundColor": "#0b1020"
+      }
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "extra": {
+      "eas": {
+        "projectId": ""
+      }
+    },
+    "plugins": [
+      "expo-asset",
+      "expo-font"
+    ]
+  }
+}

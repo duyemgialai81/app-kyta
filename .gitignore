@@ -1,0 +1,17 @@
+# Repo app-kyta CHỈ chứa app mobile.
+# Code desktop (Electron/Vite) vẫn để ở máy local nhưng không đẩy lên Git.
+# Mặc định bỏ qua tất cả, rồi chỉ cho phép những gì cần cho app:
+/*
+!/.gitignore
+!/MIGRATION_PLAN.md
+!/mobile/
+!/.github/
+
+# Workflow build desktop (Electron) — không dùng ở repo này
+/.github/workflows/publish.yml
+
+# Phòng hờ
+node_modules/
+.env
+*.log
+.DS_Store
